@@ -48,6 +48,8 @@ const EmailFollowUpTable = () => {
       setUserData(data)
     }
 
+    console.log('userdata', userData)
+
     fetchData()
   }, [])
 
