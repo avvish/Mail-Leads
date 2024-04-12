@@ -10,6 +10,7 @@ import styled from '@emotion/styled'
 
 // Component Imports
 import MaterioLogo from '@core/svg/Logo'
+import companyLogo from '../../../../public/companyLogo.svg'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
@@ -65,15 +66,7 @@ const Logo = () => {
   // return <Img src='/next.svg' width={100} height={25} alt='logo' /> // for example
   return (
     <Link href={'/en/apps/user/list'} className='flex items-center min-bs-[24px]'>
-      <MaterioLogo className='text-[22px] text-primary' />
-      <LogoText
-        ref={logoTextRef}
-        isHovered={isHovered}
-        isCollapsed={isCollapsed}
-        transitionDuration={transitionDuration}
-      >
-        {themeConfig.templateName}
-      </LogoText>
+      <img src='/companyLogo.svg' style={{ height: '60px' }} className='text-[22px] text-primary'></img>
     </Link>
   )
 }

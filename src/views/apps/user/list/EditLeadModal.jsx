@@ -89,6 +89,7 @@ const EditLeadModal = ({ open, handleClose, leadId }) => {
           multiline
           value={notes}
           name={leadId}
+          rows={4}
           style={{ marginBottom: '16px' }}
           onChange={e => handleNotes(e)}
         />

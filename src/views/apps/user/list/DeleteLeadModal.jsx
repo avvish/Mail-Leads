@@ -50,16 +50,22 @@ const DeleteLeadModal = ({ leadId, open, handleClose }) => {
         </DialogContentText>
         <Box sx={{ display: 'flex', justifyContent: 'left', gap: 2 }}>
           <Button
+            sx={{
+              backgroundColor: 'red',
+              '&:hover': {
+                backgroundColor: '#FF5A5A'
+              }
+            }}
             onClick={() => {
               handleDelete(leadId), handleClose()
             }}
             variant='contained'
             className='is-full sm:is-auto'
           >
-            Delete
+            Yes
           </Button>
-          <Button onClick={() => handleClose()} variant='contained' className='is-full sm:is-auto'>
-            Cancel
+          <Button onClick={() => handleClose()} color='secondary' variant='outlined' className='is-full sm:is-auto'>
+            No
           </Button>
         </Box>
       </Box>

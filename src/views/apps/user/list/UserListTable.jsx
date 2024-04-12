@@ -138,12 +138,7 @@ const UserListTable = () => {
           emailId: obj1.toRecipients[0].emailAddress.address
         }))
 
-        console.log('user data', usersData)
-        console.log('emails', emails)
-
         const filteredEmails = usersData.filter(val1 => !emails.some(({ emailId }) => val1.email === emailId))
-
-        console.log('filter', filteredEmails)
 
         let found
 

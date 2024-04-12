@@ -30,7 +30,7 @@ const initialData = {
   email: '',
   company: '',
   country: '',
-  business: '',
+  business: 'IT',
   recipientId: '',
   conversationId: '',
   followUpNo: 1
@@ -73,7 +73,7 @@ const AddUserDrawer = ({ open, handleClose }) => {
         const querySnapshot = await getDocs(snapShot)
 
         if (!querySnapshot.empty) {
-        } else if (formData.business.length > 0) {
+        } else if (formData.country.length > 0) {
           const currentTimeStamp = Timestamp.now()
           const currentDate = currentTimeStamp.toDate()
           const currentDateInString = formatTimestamp(currentDate)
@@ -167,7 +167,7 @@ const AddUserDrawer = ({ open, handleClose }) => {
       email: '',
       company: '',
       country: '',
-      business: ''
+      business: 'IT'
     })
   }
 
@@ -229,18 +229,17 @@ const AddUserDrawer = ({ open, handleClose }) => {
               </Select>
             </FormControl>
             <FormControl fullWidth>
-              <InputLabel id='Business'>Select Business</InputLabel>
               <Select
                 fullWidth
                 id='Business'
                 value={formData.business}
                 onChange={e => setFormData({ ...formData, business: e.target.value })}
-                label='Select Business'
                 labelId='Business'
                 inputProps={{ placeholder: 'Business' }}
                 required
               >
                 <MenuItem value='IT'>IT</MenuItem>
+                {/* <MenuItem value='IT'>IT</MenuItem> */}
                 <MenuItem value='NON-IT'>NON-IT</MenuItem>
               </Select>
             </FormControl>
