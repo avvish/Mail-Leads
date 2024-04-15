@@ -26,16 +26,14 @@ const Providers = props => {
   const systemMode = getSystemMode()
 
   return (
-    <NextAuthProvider basePath={process.env.NEXTAUTH_BASEPATH}>
-      <VerticalNavProvider>
-        <SettingsProvider settingsCookie={settingsCookie} mode={mode} demoName={demoName}>
-          <ThemeProvider direction={direction} systemMode={systemMode}>
-            {children}
-            <AppReactToastify position={themeConfig.toastPosition} hideProgressBar rtl={direction === 'rtl'} />
-          </ThemeProvider>
-        </SettingsProvider>
-      </VerticalNavProvider>
-    </NextAuthProvider>
+    <VerticalNavProvider>
+      <SettingsProvider settingsCookie={settingsCookie} mode={mode} demoName={demoName}>
+        <ThemeProvider direction={direction} systemMode={systemMode}>
+          {children}
+          <AppReactToastify position={themeConfig.toastPosition} hideProgressBar rtl={direction === 'rtl'} />
+        </ThemeProvider>
+      </SettingsProvider>
+    </VerticalNavProvider>
   )
 }
 

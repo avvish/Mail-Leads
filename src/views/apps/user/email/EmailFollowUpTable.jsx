@@ -28,9 +28,7 @@ import { toast } from 'react-toastify'
 import { Client } from '@microsoft/microsoft-graph-client'
 
 import { database } from '../../../../firebase/firebase.utils.js'
-import FollowUpEmail1 from './FollowUpEmail1.js'
-import FollowUpEmail2 from './FollowUpEmail2.js'
-import FollowUpEmail3 from './FollowUpEmail3.js'
+import FollowUpEmail from './FollowUpEmail.js'
 
 import tableStyles from '@core/styles/table.module.css'
 
@@ -42,13 +40,22 @@ const EmailFollowUpTable = () => {
   const router = useRouter()
 
   useEffect(() => {
+    const tokenExpirationTime = localStorage.getItem('tokenExpirationTime')
+    const currentTime = Date.now()
+
+    if (tokenExpirationTime < currentTime) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('tokenExpirationTime')
+      router.push('/en/login')
+    }
+  }, [userData, router])
+
+  useEffect(() => {
     async function fetchData() {
       const data = await fetchDataFromFireStore()
 
       setUserData(data)
     }
-
-    console.log('userdata', userData)
 
     fetchData()
   }, [])
@@ -139,18 +146,23 @@ const EmailFollowUpTable = () => {
           if (f.id === i) {
             if (f.recipientId && f.followUpNo === 1) {
               sent = true
-              await FollowUpEmail1(f.recipientId)
+              await FollowUpEmail(f.recipientId, f.followUpNo)
               followUpNo = 2
               await sendBulkEmails(f.id, followUpNo, f.conversationId)
             } else if (f.recipientId && f.followUpNo === 2) {
               sent = true
-              await FollowUpEmail2(f.recipientId)
+              await FollowUpEmail(f.recipientId, f.followUpNo)
               followUpNo = 3
               await sendBulkEmails(f.id, followUpNo, f.conversationId)
             } else if (f.recipientId && f.followUpNo === 3) {
               sent = true
-              await FollowUpEmail3(f.recipientId)
+              await FollowUpEmail(f.recipientId, f.followUpNo)
               followUpNo = 4
+              await sendBulkEmails(f.id, followUpNo, f.conversationId)
+            } else if (f.recipientId && f.followUpNo === 4) {
+              sent = true
+              await FollowUpEmail(f.recipientId, f.followUpNo)
+              followUpNo = 5
               await sendBulkEmails(f.id, followUpNo, f.conversationId)
             }
           }
@@ -176,11 +188,6 @@ const EmailFollowUpTable = () => {
             disabled={!row.getCanSelect()}
             indeterminate={row.getIsSomeSelected()}
             onChange={row.getToggleSelectedHandler()}
-
-            // onClick={event => {
-            //   console.log(event)
-            //   handleCheckbox(event)
-            // }}
           />
         )
       },

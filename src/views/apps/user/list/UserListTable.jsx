@@ -5,6 +5,8 @@ import { useEffect, useState, useMemo } from 'react'
 
 // MUI Imports
 
+import { useRouter } from 'next/navigation.js'
+
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -91,6 +93,18 @@ const UserListTable = () => {
   const [globalFilter, setGlobalFilter] = useState('')
   const [leadId, setLeadId] = useState()
   const [editModalOpen, setEditModalOpen] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    const tokenExpirationTime = localStorage.getItem('tokenExpirationTime')
+    const currentTime = Date.now()
+
+    if (tokenExpirationTime < currentTime) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('tokenExpirationTime')
+      router.push('/en/login')
+    }
+  }, [usersData, router])
 
   useEffect(() => {
     async function fetchData() {

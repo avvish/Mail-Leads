@@ -22,7 +22,11 @@ const Login = () => {
 
       await pca.initialize()
       const loginResponse = await pca.loginPopup(loginRequest)
+      const getExTime = loginResponse.expiresOn
+      const convertTimeInMs = new Date(getExTime)
+      const timeInMs = convertTimeInMs.getTime()
 
+      localStorage.setItem('tokenExpirationTime', timeInMs)
       localStorage.setItem('accessToken', loginResponse.accessToken)
 
       const accessToken = loginResponse.accessToken

@@ -110,6 +110,7 @@ const UserDropdown = () => {
       await pca.initialize()
       await pca.logoutPopup()
       localStorage.removeItem('accessToken')
+      localStorage.removeItem('tokenExpirationTime')
       router.push('/en/login')
     } catch (error) {
       console.log('ERROR', error)
