@@ -20,6 +20,7 @@ const FollowUpEmail = async (threadId, followUpNo) => {
 
       if (followUpNo === 1) {
         emailData = {
+          subject: 'Just a Quick Follow-up Regarding Our Proposal (1st Follow-up)',
           comment: `${emailTemplateFollowUp1}`
         }
       } else if (followUpNo === 2) {

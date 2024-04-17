@@ -60,28 +60,16 @@ const EmailFollowUpTable = () => {
     fetchData()
   }, [])
 
-  const formatDate = date => {
-    // Format the date and time using toLocaleString()
-    const formattedDateTime = date.toLocaleString('en-US', {
-      month: 'numeric',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    })
-
-    return formattedDateTime
-  }
-
   const fetchDataFromFireStore = async () => {
     const currentTimeStamp = Timestamp.now()
+
+    console.log(currentTimeStamp)
 
     const snapShot = query(
       collection(database, 'data'),
       where('response', 'in', ['No-Response', '']),
-      where('followUpNo', '<', 4),
-      where('expectedFollowupDateTimeStamp', '>=', currentTimeStamp)
+      where('followUpNo', '<=', 4),
+      where('expectedFollowupDateTimeStamp', '<=', currentTimeStamp)
     )
 
     const querySnapshot = await getDocs(snapShot)
@@ -107,7 +95,7 @@ const EmailFollowUpTable = () => {
     }
   }
 
-  const sendBulkEmails = async (id, followUpNo, conversationId) => {
+  const sendBulkEmails = async (id, followUpNo, conversationId, expectedFollowupDate) => {
     const token = localStorage.getItem('accessToken')
 
     if (token) {
@@ -124,15 +112,39 @@ const EmailFollowUpTable = () => {
 
         const newRecipientId = message.id
 
+        const currentDate = expectedFollowupDate.toDate()
+        const futureDate = new Date(currentDate)
+
+        futureDate.setDate(currentDate.getDate() + 4)
+        const futureDateInString = formatTimestamp(futureDate)
+        const futureTimeStamp = Timestamp.fromDate(futureDate)
+
         await updateDoc(doc(database, 'data', id), {
           followUpNo: followUpNo,
-          recipientId: newRecipientId
+          recipientId: newRecipientId,
+          expectedFollowupDateTimeStamp: futureTimeStamp,
+          expectedFollowupDate: futureDateInString
         })
         const data = await fetchDataFromFireStore()
 
         setUserData(data)
       }, 2000)
     }
+  }
+
+  const formatTimestamp = timestamp => {
+    const date = new Date(timestamp)
+
+    const options = {
+      month: 'numeric',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    }
+
+    return date.toLocaleString('en-US', options)
   }
 
   const handleBulkEmails = async () => {
@@ -148,22 +160,22 @@ const EmailFollowUpTable = () => {
               sent = true
               await FollowUpEmail(f.recipientId, f.followUpNo)
               followUpNo = 2
-              await sendBulkEmails(f.id, followUpNo, f.conversationId)
+              await sendBulkEmails(f.id, followUpNo, f.conversationId, f.expectedFollowupDateTimeStamp)
             } else if (f.recipientId && f.followUpNo === 2) {
               sent = true
               await FollowUpEmail(f.recipientId, f.followUpNo)
               followUpNo = 3
-              await sendBulkEmails(f.id, followUpNo, f.conversationId)
+              await sendBulkEmails(f.id, followUpNo, f.conversationId, f.expectedFollowupDateTimeStamp)
             } else if (f.recipientId && f.followUpNo === 3) {
               sent = true
               await FollowUpEmail(f.recipientId, f.followUpNo)
               followUpNo = 4
-              await sendBulkEmails(f.id, followUpNo, f.conversationId)
+              await sendBulkEmails(f.id, followUpNo, f.conversationId, f.expectedFollowupDateTimeStamp)
             } else if (f.recipientId && f.followUpNo === 4) {
               sent = true
               await FollowUpEmail(f.recipientId, f.followUpNo)
               followUpNo = 5
-              await sendBulkEmails(f.id, followUpNo, f.conversationId)
+              await sendBulkEmails(f.id, followUpNo, f.conversationId, f.expectedFollowupDateTimeStamp)
             }
           }
         })

@@ -33,6 +33,7 @@ const initialData = {
   business: 'IT',
   recipientId: '',
   conversationId: '',
+  initialDateAndTime: '',
   followUpNo: 1
 }
 
@@ -79,7 +80,7 @@ const AddUserDrawer = ({ open, handleClose }) => {
           const currentDateInString = formatTimestamp(currentDate)
           const futureDate = new Date(currentDate)
 
-          futureDate.setDate(currentDate.getDate() + 5)
+          futureDate.setDate(currentDate.getDate() + 3)
           const futureDateInString = formatTimestamp(futureDate)
           const futureTimeStamp = Timestamp.fromDate(futureDate)
 
@@ -95,12 +96,6 @@ const AddUserDrawer = ({ open, handleClose }) => {
 
             const recipientId = id.value[0].id
             const conversationId = id.value[0].conversationId
-
-            setFormData(prev => ({
-              ...prev,
-              recipientId: recipientId,
-              conversationId: conversationId
-            }))
 
             await updateDoc(doc(database, 'data', docId), {
               recipientId: recipientId,
@@ -239,7 +234,6 @@ const AddUserDrawer = ({ open, handleClose }) => {
                 required
               >
                 <MenuItem value='IT'>IT</MenuItem>
-                {/* <MenuItem value='IT'>IT</MenuItem> */}
                 <MenuItem value='NON-IT'>NON-IT</MenuItem>
               </Select>
             </FormControl>

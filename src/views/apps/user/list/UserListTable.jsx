@@ -107,13 +107,15 @@ const UserListTable = () => {
   }, [usersData, router])
 
   useEffect(() => {
-    async function fetchData() {
-      const data = await fetchDataFromFirestore()
+    setTimeout(() => {
+      async function fetchData() {
+        const data = await fetchDataFromFirestore()
 
-      setUsersData(data)
-    }
+        setUsersData(data)
+      }
 
-    fetchData()
+      fetchData()
+    }, 2000)
   }, [deleteModalOpen, addUserOpen, editModalOpen])
 
   const fetchDataFromFirestore = async () => {
@@ -183,7 +185,7 @@ const UserListTable = () => {
 
               const futureDate = new Date(currentDate)
 
-              futureDate.setDate(currentDate.getDate() + 5)
+              futureDate.setDate(currentDate.getDate() + 3)
 
               const futureDateInString = formatTimestamp(futureDate)
               const futureTimeStamp = Timestamp.fromDate(futureDate)

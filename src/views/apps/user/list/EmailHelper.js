@@ -16,7 +16,7 @@ const EmailHelper = async recipientEmail => {
 
       const emailData = {
         message: {
-          subject: 'Email content',
+          subject: 'Empower your business with XCode Web Solutions',
           body: {
             contentType: 'HTML',
             content: emailTemplate
